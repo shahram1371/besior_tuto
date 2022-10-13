@@ -6,3 +6,10 @@ abstract class HomeEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class LoadCwEvent extends HomeEvent {
+  final String cityname;
+  const LoadCwEvent({
+    required this.cityname,
+  });
+}

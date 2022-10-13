@@ -14,9 +14,9 @@ class CwCompleted extends CwStatus {
   });
 }
 
-class Error extends CwStatus {
+class CwError extends CwStatus {
   final String message;
-  Error({
+  CwError({
     required this.message,
   });
 }

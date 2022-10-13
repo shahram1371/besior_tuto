@@ -14,6 +14,6 @@ void main() async {
       BlocProvider<HomeBloc>(
         create: (_) => locator<HomeBloc>(),
       )
-    ], child: const MainWrapper()),
+    ], child: MainWrapper()),
   ));
 }

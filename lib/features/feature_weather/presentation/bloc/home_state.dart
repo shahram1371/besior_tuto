@@ -6,7 +6,7 @@ class HomeState extends Equatable {
     required this.cwStatus,
   });
   @override
-  List<Object> get props => [];
+  List<Object> get props => [cwStatus];
 
   HomeState copyWith({
     CwStatus? cwStatus,

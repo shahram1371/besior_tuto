@@ -14,8 +14,7 @@ class _MainWrapperState extends State<MainWrapper> {
   @override
   void initState() {
     print('initState');
-    BlocProvider.of<HomeBloc>(context)
-        .add(const LoadCwEvent(cityname: 'tehran'));
+    BlocProvider.of<HomeBloc>(context).add(LoadCwEvent(cityname: 'tehran'));
     super.initState();
   }
 
@@ -24,7 +23,7 @@ class _MainWrapperState extends State<MainWrapper> {
     return Scaffold(
         appBar: AppBar(),
         body: BlocBuilder<HomeBloc, HomeState>(
-          builder: (BuildContext context, state) {
+          builder: (context, state) {
             if (state.cwStatus is CwLoading) {
               return const Center(
                 child: Text('loading...'),

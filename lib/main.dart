@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
-  /// init locator
+  // / init locator
   await setup();
 
   runApp(MaterialApp(

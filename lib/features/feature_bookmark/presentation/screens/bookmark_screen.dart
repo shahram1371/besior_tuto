@@ -7,7 +7,10 @@ class BookMarkScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SizedBox(
       child: Center(
-        child: Text('BookMark Screen'),
+        child: Text(
+          'BookMark Screen',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }

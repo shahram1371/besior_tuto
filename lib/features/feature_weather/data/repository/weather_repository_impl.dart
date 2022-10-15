@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:be_senior/features/feature_weather/data/models/current_city_model.dart';
 import 'package:dartz/dartz.dart';
 
@@ -19,6 +21,7 @@ class WeatherRepositoryImpl extends WeatearRepsitory {
       if (response.statusCode == 200) {
         CurentCityEntity curentCityEntity =
             CurrentCityModel.fromJson(response.data);
+
         return Right(curentCityEntity);
       } else {
         return const Left('something went wrong. try again ...');

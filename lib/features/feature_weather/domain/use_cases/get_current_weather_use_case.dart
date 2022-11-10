@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 
 import '../entites/current_city_entitty.dart';
 
-//UseCase<CurentCityEntity, String> : input :String, output:CurentCityEntity
+//UseCase<CurentCityEntity, String> => input :String, output:CurentCityEntity
 class GetCurrentWeatherUseCase extends UseCase<CurentCityEntity, String> {
   WeatearRepsitory weatearRepsitory;
   GetCurrentWeatherUseCase({

@@ -1,15 +1,20 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
 import 'package:be_senior/core/widgets/app_background.dart';
 import 'package:be_senior/core/widgets/dot_loading_widget.dart';
+import 'package:be_senior/features/feature_weather/domain/use_cases/get_suggestion_city_usecase.dart';
 import 'package:be_senior/features/feature_weather/presentation/bloc/cw_status.dart';
 import 'package:be_senior/features/feature_weather/presentation/bloc/home_bloc.dart';
 import 'package:be_senior/features/feature_weather/presentation/screens/day_weather_view.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:be_senior/locator.dart';
 
 import '../../../../core/params/forecast_params.dart';
 import '../../../../core/utils/date_converter.dart';
 import '../../data/models/forcast_days_model.dart';
+import '../../data/models/sugget_city_model.dart';
 import '../../domain/entites/current_city_entitty.dart';
 import '../../domain/entites/forecase_days_entity.dart';
 import '../bloc/fw_status.dart';
@@ -22,6 +27,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  TextEditingController textEditingController = TextEditingController();
+  GetSuggestCityUseCase getSuggestCityUseCase =
+      GetSuggestCityUseCase(weatearRepsitory: locator());
   String cityName = 'Bukan';
   final PageController _pageController = PageController();
   @override
@@ -39,6 +47,55 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(
+              height: 0.02 * height,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: width * 0.03),
+              child: TypeAheadField(
+                suggestionsCallback: (prefix) async {
+                  final List<Datum> left = [];
+                  final resultOrException = await getSuggestCityUseCase(prefix);
+
+                  return resultOrException.fold((l) => left, (r) => r);
+                },
+                itemBuilder: (context, Datum model) {
+                  return ListTile(
+                    leading: const Icon(Icons.location_on),
+                    title: Text(model.name!),
+                    subtitle: Text("${model.region!}, ${model.country!}"),
+                  );
+                },
+                onSuggestionSelected: (Datum model) {
+                  textEditingController.text = model.name!;
+                  BlocProvider.of<HomeBloc>(context)
+                      .add(LoadCwEvent(cityname: model.name!));
+                },
+                textFieldConfiguration: TextFieldConfiguration(
+                  onSubmitted: (prefix) {
+                    textEditingController.text = prefix;
+                    BlocProvider.of<HomeBloc>(context)
+                        .add(LoadCwEvent(cityname: prefix));
+                  },
+                  controller: textEditingController,
+                  style: DefaultTextStyle.of(context).style.copyWith(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    hintText: "Enter a City...",
+                    hintStyle: TextStyle(color: Colors.white),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             BlocBuilder<HomeBloc, HomeState>(
               buildWhen: (previous, current) {
                 if (previous.cwStatus == current.cwStatus) {
@@ -123,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                       const SizedBox(
-                                        height: 20,
+                                        height: 10,
                                       ),
                                       Row(
                                         mainAxisAlignment:

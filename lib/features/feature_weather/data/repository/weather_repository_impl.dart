@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:be_senior/core/params/forecast_params.dart';
 import 'package:be_senior/features/feature_weather/data/models/current_city_model.dart';
 import 'package:be_senior/features/feature_weather/data/models/forcast_days_model.dart';
+import 'package:be_senior/features/feature_weather/data/models/sugget_city_model.dart';
 import 'package:be_senior/features/feature_weather/domain/entites/forecase_days_entity.dart';
+import 'package:be_senior/features/feature_weather/domain/entites/suggest_city_entity.dart';
 import 'package:dartz/dartz.dart';
 
 import 'package:be_senior/features/feature_weather/data/data_source/remote/api_provider.dart';
@@ -49,5 +51,13 @@ class WeatherRepositoryImpl extends WeatearRepsitory {
     } catch (e) {
       return const Left('please check your connection');
     }
+  }
+
+  @override
+  Future<Either<String, List<Datum>>> fetchSuggetData(String prefix) async {
+    Response response = await apiProvider.sendRequestCitySuggestion(prefix);
+    final SuggetCityEntity suggetCityEntity =
+        SuggetCityModel.fromJson(response.data);
+    return Right(suggetCityEntity.data!);
   }
 }

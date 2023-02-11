@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   // / init locator
+  WidgetsFlutterBinding.ensureInitialized();
   await setup();
 
   runApp(MaterialApp(
